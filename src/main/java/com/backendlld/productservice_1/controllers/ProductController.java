@@ -27,8 +27,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(Product product) {
-        return new Product();
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
     }
 
     @DeleteMapping("/{id}")

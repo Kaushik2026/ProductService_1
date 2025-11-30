@@ -5,7 +5,6 @@ import com.backendlld.productservice_1.exceptions.ProductNotFoundException;
 import com.backendlld.productservice_1.models.Category;
 import com.backendlld.productservice_1.models.Product;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,15 +13,15 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ProductServiceImpl implements ProductService{
+public class FakeStoreProductServiceImpl implements ProductService{
 
     private RestTemplate restTemplate;
 
     @Override
     public Product getSingleProductById(Long id) throws ProductNotFoundException{
-        throw new ProductNotFoundException(id,"Invalid Id");
-//        FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
-//        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
+//        throw new ProductNotFoundException(id,"Invalid Id");
+        FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDto.class);
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
     }
 
     @Override
