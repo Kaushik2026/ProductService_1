@@ -24,4 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("Select p.productName as title,p.productPrice as price from products p")
     List<ProductWithTitleAndPrice> getTitleAndPrice();
+
+    @Override
+    void deleteById(Long id);
 }

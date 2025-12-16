@@ -1,5 +1,6 @@
 package com.backendlld.productservice_1.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class Product extends BaseModel{
     private double productPrice;
     private String image;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)//persist means we don't need to add additional code to save internal object like category
+    //while saving product(check SelfProductServiceImpl.createProduct method);
     private Category category;
 }
