@@ -7,6 +7,8 @@ import com.backendlld.productservice_1.services.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.servlet.support.WebContentGenerator;
 
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ProductControllerTest {
@@ -23,6 +25,7 @@ class ProductControllerTest {
 
     @MockitoBean
     private ProductService productService;
+
     @Autowired
     private WebContentGenerator webContentGenerator;
 
@@ -42,7 +45,8 @@ class ProductControllerTest {
                 thenReturn(Expectedproduct);
 
 //        Act
-        Product returnedProduct = productService.getSingleProductById(10L);
+        ResponseEntity<Product> response = productController.getSingleProductById(10L);
+        Product returnedProduct = response.getBody();
 //        Product TProduct = new Product();
 
 //        Assert
@@ -56,16 +60,30 @@ class ProductControllerTest {
         Expectedproducts.add(new Product());
         when(productService.getAllProducts()).thenReturn(Expectedproducts);
 
-        List<Product> returnedproducts = productService.getAllProducts();
+        List<Product> returnedproducts = productController.getAllProducts();
         assertEquals(Expectedproducts, returnedproducts);
     }
 
     @Test
     void createProductTest() {
+        Product Expectedproduct = new Product();
+        Expectedproduct.setId(1L);
+        Expectedproduct.setProductName("product10");
+        Expectedproduct.setProductDescription("product10Desc");
+        Expectedproduct.setProductPrice(101);
+
+        when(productService.createProduct(Expectedproduct)).thenReturn(Expectedproduct);
+        Product returnedProduct = productController.createProduct(Expectedproduct);
+        assertEquals(Expectedproduct, returnedProduct);
     }
 
     @Test
     void deleteProductTest() {
+        Long productId = 1L;
+
+        productController.DeleteProduct(productId);
+
+        verify(productService,times(1)).DeleteProduct(productId);
     }
 
     @Test

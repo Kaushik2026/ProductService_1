@@ -33,7 +33,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public void DeleteProduct(@PathVariable("id") Long productId) {
-
+        productService.DeleteProduct(productId);
     }
 
     @PatchMapping("/{id}")//for partial update
