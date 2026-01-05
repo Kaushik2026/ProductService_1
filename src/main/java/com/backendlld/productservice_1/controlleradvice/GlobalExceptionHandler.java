@@ -21,11 +21,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException e) {
-        Map<String, String> error = Map.of(
-                "error", "Validation Failed",
-                "message", e.getMessage()
-        );
-        return ResponseEntity.badRequest().body(error);
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
+        String message = e.getMessage()+". Please add category value.";
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(message);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 }

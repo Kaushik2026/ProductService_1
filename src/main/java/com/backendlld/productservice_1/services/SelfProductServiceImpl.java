@@ -43,12 +43,18 @@ public class SelfProductServiceImpl implements ProductService{
             throw new IllegalArgumentException("Category cannot be empty");
         }
 
-        Category category = categoryRepository.findByValue(categoryValue)
-                .orElseGet(() -> {
-                    Category newCat = new Category();
-                    newCat.setValue(categoryValue);
-                    return categoryRepository.save(newCat);
-                });
+        // Always find existing category by VALUE
+        Optional<Category> categoryOptional = categoryRepository.findByValue(categoryValue);
+        Category category;
+        if(categoryOptional.isEmpty()){
+            // Create new category if not found
+            Category newCategory = new Category();
+            newCategory.setValue(categoryValue);
+            category = categoryRepository.save(newCategory);
+        }else{
+            category = categoryOptional.get();
+        }
+
 
         Product product = new Product();
         product.setProductName(dto.getProductName());
