@@ -1,5 +1,6 @@
 package com.backendlld.productservice_1.controllers;
 
+import com.backendlld.productservice_1.dtos.CreateProductDto;
 import com.backendlld.productservice_1.exceptions.ProductNotFoundException;
 import com.backendlld.productservice_1.models.Product;
 import com.backendlld.productservice_1.services.ProductService;
@@ -28,7 +29,13 @@ public class ProductController {
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+        CreateProductDto createProductDto = new CreateProductDto();
+        createProductDto.setCategoryValue(product.getCategory().getValue());
+        createProductDto.setProductName(product.getProductName());
+        createProductDto.setProductDescription(product.getProductDescription());
+        createProductDto.setProductPrice(product.getProductPrice());
+        createProductDto.setImage(product.getImage());
+        return productService.createProduct(createProductDto);
     }
 
     @DeleteMapping("/{id}")

@@ -1,5 +1,7 @@
 package com.backendlld.productservice_1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,5 +18,6 @@ public class Category extends BaseModel{
 
 //    mapped by is always used in the parent side of the relationship(one to many side)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.REMOVE)
+//    @JsonManagedReference
     private List<Product> products;
 }

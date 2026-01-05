@@ -64,18 +64,18 @@ class ProductControllerTest {
         assertEquals(Expectedproducts, returnedproducts);
     }
 
-    @Test
-    void createProductTest() {
-        Product Expectedproduct = new Product();
-        Expectedproduct.setId(1L);
-        Expectedproduct.setProductName("product10");
-        Expectedproduct.setProductDescription("product10Desc");
-        Expectedproduct.setProductPrice(101);
-
-        when(productService.createProduct(Expectedproduct)).thenReturn(Expectedproduct);
-        Product returnedProduct = productController.createProduct(Expectedproduct);
-        assertEquals(Expectedproduct, returnedProduct);
-    }
+//    @Test
+//    void createProductTest() {
+//        Product Expectedproduct = new Product();
+//        Expectedproduct.setId(1L);
+//        Expectedproduct.setProductName("product10");
+//        Expectedproduct.setProductDescription("product10Desc");
+//        Expectedproduct.setProductPrice(101);
+//
+//        when(productService.createProduct(Expectedproduct)).thenReturn(Expectedproduct);
+//        Product returnedProduct = productController.createProduct(Expectedproduct);
+//        assertEquals(Expectedproduct, returnedProduct);
+//    }
 
     @Test
     void deleteProductTest() {

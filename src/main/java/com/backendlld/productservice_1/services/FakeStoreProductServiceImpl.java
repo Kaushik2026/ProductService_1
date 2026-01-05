@@ -1,5 +1,6 @@
 package com.backendlld.productservice_1.services;
 
+import com.backendlld.productservice_1.dtos.CreateProductDto;
 import com.backendlld.productservice_1.dtos.FakeStoreProductDto;
 import com.backendlld.productservice_1.exceptions.ProductNotFoundException;
 import com.backendlld.productservice_1.models.Category;
@@ -37,9 +38,14 @@ public class FakeStoreProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product createProduct(Product product) {
+    public Product createProduct(CreateProductDto createProductDto) {
         return null;
     }
+
+//    @Override
+//    public Product createProduct(Product product) {
+//        return null;
+//    }
 
     @Override
     public void DeleteProduct(Long productId) {

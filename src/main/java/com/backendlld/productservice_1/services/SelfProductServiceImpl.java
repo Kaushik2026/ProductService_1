@@ -1,5 +1,6 @@
 package com.backendlld.productservice_1.services;
 
+import com.backendlld.productservice_1.dtos.CreateProductDto;
 import com.backendlld.productservice_1.exceptions.ProductNotFoundException;
 import com.backendlld.productservice_1.models.Category;
 import com.backendlld.productservice_1.models.Product;
@@ -33,24 +34,28 @@ public class SelfProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product createProduct(Product product) {
-//        if(product.getCategory()!=null){
-//            if(product.getCategory().getId() == null){
-//                Category category = product.getCategory();
-//                String categoryValue = category.getValue();
-//                Optional<Category> optionalCategory = categoryRepository.findByValue(categoryValue);
-//                if(optionalCategory.isEmpty()){
-//                    category=categoryRepository.save(category);
-//                    product.setCategory(category);
-//                }else{
-//                    product.setCategory(optionalCategory.get());
-//                }
-//
-//
-//            }
-//        }else{
-//            throw new RuntimeException("Category cannot be empty");
-//        }
+    public Product createProduct(CreateProductDto dto) {
+        // Always find existing category by VALUE
+
+        String categoryValue = dto.getCategoryValue();
+        // 1. Validate category input
+        if (categoryValue == null || categoryValue.trim().isEmpty()) {
+            throw new IllegalArgumentException("Category cannot be empty");
+        }
+
+        Category category = categoryRepository.findByValue(categoryValue)
+                .orElseGet(() -> {
+                    Category newCat = new Category();
+                    newCat.setValue(categoryValue);
+                    return categoryRepository.save(newCat);
+                });
+
+        Product product = new Product();
+        product.setProductName(dto.getProductName());
+        product.setProductDescription(dto.getProductDescription());
+        product.setProductPrice(dto.getProductPrice());
+        product.setImage(dto.getImage());
+        product.setCategory(category);  // Existing OR newly created
         return productRepository.save(product);
     }
 

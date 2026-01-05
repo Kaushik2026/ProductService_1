@@ -1,5 +1,6 @@
 package com.backendlld.productservice_1.services;
 
+import com.backendlld.productservice_1.dtos.CreateProductDto;
 import com.backendlld.productservice_1.exceptions.ProductNotFoundException;
 import com.backendlld.productservice_1.models.Product;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ public interface ProductService {
     Product getSingleProductById(Long id) throws ProductNotFoundException;
     List<Product> getAllProducts();
 
-    Product createProduct(Product product);
+    Product createProduct(CreateProductDto createProductDto);
 
     void DeleteProduct(Long productId);
 
