@@ -16,8 +16,6 @@ public class Category extends BaseModel{
     @Column(unique = true)
     private String value;
 
-//    mapped by is always used in the parent side of the relationship(one to many side)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.REMOVE)
-//    @JsonManagedReference
     private List<Product> products;
 }

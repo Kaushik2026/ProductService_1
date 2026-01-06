@@ -1,11 +1,13 @@
 package com.backendlld.productservice_1.services;
 
 import com.backendlld.productservice_1.dtos.CreateProductDto;
+import com.backendlld.productservice_1.dtos.UpdateProductDto;
 import com.backendlld.productservice_1.exceptions.ProductNotFoundException;
 import com.backendlld.productservice_1.models.Category;
 import com.backendlld.productservice_1.models.Product;
 import com.backendlld.productservice_1.repositories.CategoryRepository;
 import com.backendlld.productservice_1.repositories.ProductRepository;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -34,49 +36,95 @@ public class SelfProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product createProduct(CreateProductDto dto) {
+    public Product createProduct(CreateProductDto dto) throws IllegalArgumentException{
+//          - @NotBlank → null ❌, "" ❌, "   " ❌ (trims + checks non-empty)
+//        use this validation for future needs like below:
+//          - Custom business rules: categoryValue.startsWith("CAT_")
+//          - Complex logic: database/category enum checks
+//          - Future requirements
+        validateCategoryValue(dto.getCategoryValue());
         // Always find existing category by VALUE
+        Category category = getCategory(dto.getCategoryValue());
 
-        String categoryValue = dto.getCategoryValue();
-        // 1. Validate category input
-        if (categoryValue == null || categoryValue.trim().isEmpty()) {
-            throw new IllegalArgumentException("Category cannot be empty");
+        Product product = convertProductDtoToProduct(dto,category);
+        return productRepository.save(product);
+    }
+
+    @Override
+    public void DeleteProduct(Long productId) throws ProductNotFoundException{
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException(productId, "Product not found");
         }
+        productRepository.deleteById(productId);
+    }
 
-        // Always find existing category by VALUE
-        Optional<Category> categoryOptional = categoryRepository.findByValue(categoryValue);
-        Category category;
-        if(categoryOptional.isEmpty()){
-            // Create new category if not found
-            Category newCategory = new Category();
-            newCategory.setValue(categoryValue);
-            category = categoryRepository.save(newCategory);
-        }else{
-            category = categoryOptional.get();
+    @Override
+    public Product UpdateProduct(Long productId, UpdateProductDto dto) throws ProductNotFoundException {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if(optionalProduct.isEmpty()){
+            throw new ProductNotFoundException(productId,"Product not found");
         }
+        Product product = optionalProduct.get();
+        if(dto.getProductName() != null)
+            product.setProductName(dto.getProductName());
+        if(dto.getProductDescription() != null)
+            product.setProductDescription(dto.getProductDescription());
+        if(dto.getProductPrice() != null)
+            product.setProductPrice(dto.getProductPrice());
+        if(dto.getImage() != null)
+            product.setImage(dto.getImage());
+        if (dto.getCategoryValue() != null && !dto.getCategoryValue().trim().isEmpty()) {
+            Category category = getCategory(dto.getCategoryValue());
+            product.setCategory(category);
+        }
+        return productRepository.save(product);
+    }
+
+    @Override
+    public Product replaceProduct(Long productId,CreateProductDto dto) throws ProductNotFoundException,IllegalArgumentException{
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if(optionalProduct.isEmpty()){
+            throw new ProductNotFoundException(productId,"Product not found");
+        }
+        validateCategoryValue(dto.getCategoryValue());
+        Category category = getCategory(dto.getCategoryValue());
+        Product product = optionalProduct.get();
+        product.setProductName(dto.getProductName());
+        product.setProductDescription(dto.getProductDescription());
+        product.setProductPrice(dto.getProductPrice());
+        product.setImage(dto.getImage());
 
 
+        product.setCategory(category);
+        return productRepository.save(product);
+
+    }
+
+    private Product convertProductDtoToProduct(CreateProductDto dto,Category category){
         Product product = new Product();
         product.setProductName(dto.getProductName());
         product.setProductDescription(dto.getProductDescription());
         product.setProductPrice(dto.getProductPrice());
         product.setImage(dto.getImage());
-        product.setCategory(category);  // Existing OR newly created
-        return productRepository.save(product);
+        product.setCategory(category);
+        return product;
     }
-
-    @Override
-    public void DeleteProduct(Long productId) {
-        productRepository.deleteById(productId);
+    private Category getCategory(String cv){
+        String categoryValue = cv.trim();
+        Optional<Category> categoryOptional = categoryRepository.findByValue(categoryValue);
+        Category category;
+        if(categoryOptional.isEmpty()){
+            category = new Category();
+            category.setValue(categoryValue);
+            category = categoryRepository.save(category);
+        }else{
+            category = categoryOptional.get();
+        }
+        return category;
     }
-
-    @Override
-    public void UpdateProduct(Product product, Long productId) {
-
-    }
-
-    @Override
-    public void replaceProduct(Long productId, Product product) {
-
+    private void validateCategoryValue(String cv){
+        if(cv == null || cv.trim().isEmpty()){
+            throw new IllegalArgumentException("CategoryValue cannot be null or empty");
+        }
     }
 }

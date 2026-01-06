@@ -1,6 +1,7 @@
 package com.backendlld.productservice_1.services;
 
 import com.backendlld.productservice_1.dtos.CreateProductDto;
+import com.backendlld.productservice_1.dtos.UpdateProductDto;
 import com.backendlld.productservice_1.exceptions.ProductNotFoundException;
 import com.backendlld.productservice_1.models.Product;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,11 @@ public interface ProductService {
 
     Product createProduct(CreateProductDto createProductDto);
 
-    void DeleteProduct(Long productId);
+    void DeleteProduct(Long productId) throws  ProductNotFoundException;
 
 
-    void UpdateProduct(Product product,Long productId);
+    Product UpdateProduct(Long productId, UpdateProductDto dto) throws ProductNotFoundException;
 
 
-    void replaceProduct(Long productId,Product product);
+    Product replaceProduct(Long productId,CreateProductDto dto)throws ProductNotFoundException,IllegalArgumentException;
 }

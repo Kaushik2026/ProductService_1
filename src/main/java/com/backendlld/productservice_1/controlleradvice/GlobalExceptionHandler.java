@@ -1,13 +1,13 @@
 package com.backendlld.productservice_1.controlleradvice;
 
+import com.backendlld.productservice_1.dtos.MethodArgumentNotValidExceptionResponseDto;
 import com.backendlld.productservice_1.dtos.ProductNotFoundExceptionDto;
 import com.backendlld.productservice_1.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,10 +21,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e) {
-        String message = e.getMessage()+". Please add category value.";
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(message);
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<MethodArgumentNotValidExceptionResponseDto> handleIllegalArgument(IllegalArgumentException e) {
+        MethodArgumentNotValidExceptionResponseDto responseDto = new MethodArgumentNotValidExceptionResponseDto();
+        responseDto.setMessage(e.getMessage());
+        responseDto.setResolution("Please provide valid input1");
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<MethodArgumentNotValidExceptionResponseDto> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+        MethodArgumentNotValidExceptionResponseDto responseDto = new MethodArgumentNotValidExceptionResponseDto();
+        responseDto.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        responseDto.setResolution("Please provide valid input");
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
 }

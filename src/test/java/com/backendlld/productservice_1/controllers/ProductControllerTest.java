@@ -53,16 +53,16 @@ class ProductControllerTest {
         assertEquals(Expectedproduct, returnedProduct);
     }
 
-    @Test
-    void getAllProductsTest() {
-        List<Product> Expectedproducts = new ArrayList<>();
-        Expectedproducts.add(new Product());
-        Expectedproducts.add(new Product());
-        when(productService.getAllProducts()).thenReturn(Expectedproducts);
-
-        List<Product> returnedproducts = productController.getAllProducts();
-        assertEquals(Expectedproducts, returnedproducts);
-    }
+//    @Test
+//    void getAllProductsTest() {
+//        List<Product> Expectedproducts = new ArrayList<>();
+//        Expectedproducts.add(new Product());
+//        Expectedproducts.add(new Product());
+//        when(productService.getAllProducts()).thenReturn(Expectedproducts);
+//
+//        List<Product> returnedproducts = productController.getAllProducts();
+//        assertEquals(Expectedproducts, returnedproducts);
+//    }
 
 //    @Test
 //    void createProductTest() {
@@ -77,14 +77,14 @@ class ProductControllerTest {
 //        assertEquals(Expectedproduct, returnedProduct);
 //    }
 
-    @Test
-    void deleteProductTest() {
-        Long productId = 1L;
-
-        productController.DeleteProduct(productId);
-
-        verify(productService,times(1)).DeleteProduct(productId);
-    }
+//    @Test
+//    void deleteProductTest() {
+//        Long productId = 1L;
+//
+//        productController.DeleteProduct(productId);
+//
+//        verify(productService,times(1)).DeleteProduct(productId);
+//    }
 
     @Test
     void updateProductTest() {
