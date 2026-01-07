@@ -3,14 +3,16 @@ package com.backendlld.productservice_1.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Getter
 @Setter
 @Entity(name = "products")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Product extends BaseModel{
     private String productName;
     private String productDescription;
@@ -22,4 +24,6 @@ public class Product extends BaseModel{
 //    @JsonBackReference
     @JsonIgnoreProperties("products")
     private Category category;
+
+
 }

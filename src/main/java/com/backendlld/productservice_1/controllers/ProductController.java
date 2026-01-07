@@ -38,13 +38,13 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public void DeleteProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
-        productService.DeleteProduct(productId);
+        productService.deleteProduct(productId);
     }
 
     @PatchMapping("/{id}")//for partial update
     public ResponseEntity<Product> UpdateProduct(@PathVariable("id")  Long productId, @RequestBody UpdateProductDto productDto) throws ProductNotFoundException {
 
-        return new ResponseEntity<>(productService.UpdateProduct(productId,productDto),HttpStatus.OK);
+        return new ResponseEntity<>(productService.updateProduct(productId,productDto),HttpStatus.OK);
 
     }
 

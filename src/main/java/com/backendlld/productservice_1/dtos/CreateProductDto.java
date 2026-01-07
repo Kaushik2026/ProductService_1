@@ -5,13 +5,14 @@ import com.backendlld.productservice_1.models.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CreateProductDto {
     @NotBlank(message = "Product name required")
     private String productName;
@@ -24,23 +25,14 @@ public class CreateProductDto {
     private Double productPrice;
     private String image;
 
-//    public static CreateProductDto from(Product product){
-//        CreateProductDto createProductDto = new CreateProductDto();
-//        if(product.getCategory() != null) {
-//            String categoryValue = product.getCategory().getValue();
-//            if (categoryValue == null || categoryValue.trim().isEmpty()) {
-//                throw new IllegalArgumentException("CategoryValue cannot be empty");
-//            }
-//            createProductDto.setCategoryValue(product.getCategory().getValue());
-//        }else{
-//            throw new IllegalArgumentException("Category cannot be null");
-//        }
-//
-//
-//        createProductDto.setProductName(product.getProductName());
-//        createProductDto.setProductDescription(product.getProductDescription());
-//        createProductDto.setProductPrice(product.getProductPrice());
-//        createProductDto.setImage(product.getImage());
-//        return createProductDto;
-//    }
+
+    public Product createProduct(Category  category) {
+        return Product.builder()
+                .productName(this.productName)
+                .productDescription(this.productDescription)
+                .productPrice(this.productPrice)
+                .image(this.image)
+                .category(category)
+                .build();
+    }
 }

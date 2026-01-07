@@ -7,7 +7,6 @@ import com.backendlld.productservice_1.models.Category;
 import com.backendlld.productservice_1.models.Product;
 import com.backendlld.productservice_1.repositories.CategoryRepository;
 import com.backendlld.productservice_1.repositories.ProductRepository;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -46,12 +45,11 @@ public class SelfProductServiceImpl implements ProductService{
         // Always find existing category by VALUE
         Category category = getCategory(dto.getCategoryValue());
 
-        Product product = convertProductDtoToProduct(dto,category);
-        return productRepository.save(product);
+        return productRepository.save(dto.createProduct(category));
     }
 
     @Override
-    public void DeleteProduct(Long productId) throws ProductNotFoundException{
+    public void deleteProduct(Long productId) throws ProductNotFoundException{
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException(productId, "Product not found");
         }
@@ -59,7 +57,7 @@ public class SelfProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product UpdateProduct(Long productId, UpdateProductDto dto) throws ProductNotFoundException {
+    public Product updateProduct(Long productId, UpdateProductDto dto) throws ProductNotFoundException {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if(optionalProduct.isEmpty()){
             throw new ProductNotFoundException(productId,"Product not found");
@@ -86,6 +84,7 @@ public class SelfProductServiceImpl implements ProductService{
         if(optionalProduct.isEmpty()){
             throw new ProductNotFoundException(productId,"Product not found");
         }
+
         validateCategoryValue(dto.getCategoryValue());
         Category category = getCategory(dto.getCategoryValue());
         Product product = optionalProduct.get();
@@ -93,22 +92,11 @@ public class SelfProductServiceImpl implements ProductService{
         product.setProductDescription(dto.getProductDescription());
         product.setProductPrice(dto.getProductPrice());
         product.setImage(dto.getImage());
-
-
         product.setCategory(category);
         return productRepository.save(product);
 
     }
 
-    private Product convertProductDtoToProduct(CreateProductDto dto,Category category){
-        Product product = new Product();
-        product.setProductName(dto.getProductName());
-        product.setProductDescription(dto.getProductDescription());
-        product.setProductPrice(dto.getProductPrice());
-        product.setImage(dto.getImage());
-        product.setCategory(category);
-        return product;
-    }
     private Category getCategory(String cv){
         String categoryValue = cv.trim();
         Optional<Category> categoryOptional = categoryRepository.findByValue(categoryValue);

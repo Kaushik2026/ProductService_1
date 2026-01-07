@@ -1,7 +1,9 @@
 package com.backendlld.productservice_1.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,6 +15,8 @@ import java.util.Date;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@AllArgsConstructor
+@NoArgsConstructor
 public class BaseModel {
 
     @Id
@@ -25,5 +29,6 @@ public class BaseModel {
 
     @LastModifiedDate
     private Date updated_at;
+
 
 }

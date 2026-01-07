@@ -16,10 +16,10 @@ public interface ProductService {
 
     Product createProduct(CreateProductDto createProductDto);
 
-    void DeleteProduct(Long productId) throws  ProductNotFoundException;
+    void deleteProduct(Long productId) throws  ProductNotFoundException;
 
 
-    Product UpdateProduct(Long productId, UpdateProductDto dto) throws ProductNotFoundException;
+    Product updateProduct(Long productId, UpdateProductDto dto) throws ProductNotFoundException;
 
 
     Product replaceProduct(Long productId,CreateProductDto dto)throws ProductNotFoundException,IllegalArgumentException;
